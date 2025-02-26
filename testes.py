@@ -4,37 +4,37 @@ from main import adicionar_usuario, listar_usuarios, filtrar_maiores, calcular_m
 class TesteSistema(unittest.TestCase):
 
     def setUp(self):
-        """Executado antes de cada teste para garantir que a lista de usuários esteja vazia."""
-        limpar_usuarios()
+        """Reseta a lista de usuários antes de cada teste"""
+        self.usuarios = limpar_usuarios()
 
     def test_adicionar_usuario(self):
         """Testa a adição de um novo usuário."""
-        adicionar_usuario("Carlos", 30)
-        self.assertEqual(len(listar_usuarios()), 1)
-        self.assertEqual(listar_usuarios()[0]["nome"], "Carlos")
+        self.usuarios = adicionar_usuario(self.usuarios, "Carlos", 30)
+        self.assertEqual(len(listar_usuarios(self.usuarios)), 1)
+        self.assertEqual(listar_usuarios(self.usuarios)[0]["nome"], "Carlos")
 
     def test_listar_usuarios(self):
         """Testa se a listagem retorna uma lista."""
-        adicionar_usuario("Ana", 22)
-        adicionar_usuario("Bruno", 25)
-        lista = listar_usuarios()
+        self.usuarios = adicionar_usuario(self.usuarios, "Ana", 22)
+        self.usuarios = adicionar_usuario(self.usuarios, "Bruno", 25)
+        lista = listar_usuarios(self.usuarios)
         self.assertIsInstance(lista, list)
         self.assertEqual(len(lista), 2)
 
     def test_filtrar_maiores(self):
         """Testa se apenas maiores de idade são retornados."""
-        adicionar_usuario("Ana", 17)
-        adicionar_usuario("Marcos", 20)
-        adicionar_usuario("João", 25)
-        maiores = filtrar_maiores()
+        self.usuarios = adicionar_usuario(self.usuarios, "Ana", 17)
+        self.usuarios = adicionar_usuario(self.usuarios, "Marcos", 20)
+        self.usuarios = adicionar_usuario(self.usuarios, "João", 25)
+        maiores = filtrar_maiores(self.usuarios)
         self.assertEqual(len(maiores), 2)
         self.assertTrue(all(user["idade"] >= 18 for user in maiores))
 
     def test_calcular_media_idades(self):
         """Testa o cálculo da média das idades."""
-        adicionar_usuario("Eduardo", 30)
-        adicionar_usuario("Fernanda", 20)
-        media = calcular_media_idades()
+        self.usuarios = adicionar_usuario(self.usuarios, "Eduardo", 30)
+        self.usuarios = adicionar_usuario(self.usuarios, "Fernanda", 20)
+        media = calcular_media_idades(self.usuarios)
         self.assertEqual(media, 25)
 
     def test_gerar_mensagem_personalizada(self):
